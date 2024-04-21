@@ -11,6 +11,8 @@ import { UserService } from './user/user.service';
 import { PassportModule } from '@nestjs/passport';
 import { LocalStrategy } from './auth/local.strategy';
 import { AuthService } from './auth/auth.service';
+import { WalletController } from './wallet/wallet.controller';
+import { WalletService } from './wallet/wallet.service';
 
 @Module({
   imports: [
@@ -22,12 +24,13 @@ import { AuthService } from './auth/auth.service';
       { name: Transaction.name, schema: TransactionSchema },
     ]),
   ],
-  controllers: [AppController, UserController],
+  controllers: [AppController, UserController, WalletController],
   providers: [
     AppService,
     UserService,
     AuthService,
     LocalStrategy,
+    WalletService,
   ],
 })
 export class AppModule {}
