@@ -2,8 +2,11 @@ import { Response, Request } from 'express';
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpStatus,
+  Param,
+  Patch,
   Post,
   Req,
   Res,
@@ -14,7 +17,7 @@ import mongoose from 'mongoose';
 import { WalletService } from './wallet.service';
 import { TokenAuthGuard } from 'src/auth/token-auth.guard';
 import { CreateWalletDto } from './create-wallet.dto';
-
+import { UpdateWalletDto } from './update-wallet.dto';
 
 @Controller('wallets')
 export class WalletController {
@@ -44,5 +47,21 @@ export class WalletController {
       }
       throw error;
     }
+  }
+
+  @UseGuards(TokenAuthGuard)
+  @Patch(':wallet')
+  updateOne(
+    @Param('wallet') wallet: string,
+    @Req() req: Request,
+    @Body() data: UpdateWalletDto,
+  ) {
+    return this.walletService.updateOne(wallet, req.user.toString(), data);
+  }
+
+  @UseGuards(TokenAuthGuard)
+  @Delete(':wallet')
+  deleteOne(@Param('wallet') wallet: string, @Req() req: Request) {
+    return this.walletService.deleteOne(wallet, req.user.toString());
   }
 }
