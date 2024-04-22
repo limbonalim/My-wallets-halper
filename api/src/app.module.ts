@@ -13,6 +13,8 @@ import { LocalStrategy } from './auth/local.strategy';
 import { AuthService } from './auth/auth.service';
 import { WalletController } from './wallet/wallet.controller';
 import { WalletService } from './wallet/wallet.service';
+import { TransactionController } from './transaction/transaction.controller';
+import { TransactionService } from './transaction/transaction.service';
 
 @Module({
   imports: [
@@ -24,13 +26,14 @@ import { WalletService } from './wallet/wallet.service';
       { name: Transaction.name, schema: TransactionSchema },
     ]),
   ],
-  controllers: [AppController, UserController, WalletController],
+  controllers: [AppController, UserController, WalletController, TransactionController],
   providers: [
     AppService,
     UserService,
     AuthService,
     LocalStrategy,
     WalletService,
+    TransactionService,
   ],
 })
 export class AppModule {}
