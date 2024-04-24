@@ -1,0 +1,7 @@
+.Home {
+  &__category {
+    display: grid;
+    grid-template-columns: repeat(3, 300px);
+    gap: 20px
+  }
+}
