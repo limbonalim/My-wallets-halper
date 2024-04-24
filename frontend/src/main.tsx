@@ -7,6 +7,7 @@ import { ThemeProvider } from '@mui/material';
 import App from './App.tsx';
 import { persistor, store } from './app/store.ts';
 import theme from './theme.ts';
+import './index.scss'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <Provider store={store}>
