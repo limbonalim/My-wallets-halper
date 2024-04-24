@@ -1,0 +1,18 @@
+.WalletCategory {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #FFFFFF;
+  border-radius: 15px;
+  box-shadow: -4px -1px 47px -3px rgba(161,161,161,0.8);
+  padding: 20px;
+
+  &__icon {
+    max-width: 60px;
+  }
+
+  &__link {
+    text-decoration: none;
+    color: inherit;
+  }
+}
