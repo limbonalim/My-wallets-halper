@@ -1,0 +1,57 @@
+.Navigation {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  &__li {
+    margin: 0 0 5px;
+    padding: 3px;
+  }
+  &__li:hover {
+    background: rgba(86, 85, 185, 0.2);
+    border-radius: 12px;
+  }
+
+  &__link {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    border: none;
+    background: transparent;
+    text-decoration: none;
+    text-align: left;
+    padding: 0;
+    color: inherit;
+  }
+  &__link__text {
+    padding: 0;
+    margin: 0;
+    opacity: 0;
+    width: 0px;
+    transition: width 3s;
+    transform:translateX(10%)
+  }
+  &:hover &__link__text  {
+    display: inline;
+    opacity: 1;
+    width: 130px;
+    transform:translateX(0%)
+  }
+}
+
+.active {
+  color: #0809FE;
+}
+
+.active * {
+  fill: #0809FE;
+  transition: all 1s;
+}
+
+.button:active {
+  color: red;
+}
+
+.button:active * {
+  fill: red;
+  transition: all 120ms;
+}
