@@ -1,5 +1,6 @@
-import { navigationItems } from '../../constants';
 import NavigationItem from './NavigationItem';
+import { navigationItems } from '../../constants';
+
 import './Navigation.scss';
 
 const Navigation = () => {

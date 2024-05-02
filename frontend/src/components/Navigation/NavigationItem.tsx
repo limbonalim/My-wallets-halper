@@ -2,11 +2,11 @@ import React from 'react';
 import { ChartBar, SignOut, Swap, User, Wallet } from '@phosphor-icons/react';
 import { NavLink } from 'react-router-dom';
 import { Typography } from '@mui/material';
-import { INavigationItem } from '../../constants';
+import { INavigationItem } from '../../types';
 
 interface Props {
-    item: INavigationItem;
-    index: number;
+  item: INavigationItem;
+  index: number;
 }
 const NavigationItem: React.FC<Props> = ({ item, index }) => {
   let icon;
