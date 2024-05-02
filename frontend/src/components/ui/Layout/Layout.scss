@@ -1,0 +1,17 @@
+.Layout {
+  padding: 0 15px;
+  &__header {
+    margin: 0 0 25px;
+  }
+  &__flex {
+    display: flex;
+  }
+
+  &__navigation {
+  }
+
+  &__main {
+    padding: 0 25px;
+    width: 80%;
+  }
+}
