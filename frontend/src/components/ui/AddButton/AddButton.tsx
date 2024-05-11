@@ -8,7 +8,7 @@ interface Props {
 
 const AddButton: React.FC<Props> = ({onClick}) => {
     return (
-      <button className="AddButton" onClick={onClick}>
+      <button className="AddButton Base_batton" onClick={onClick}>
         <PlusCircle size={70} color="#030303" />
       </button>
     );
