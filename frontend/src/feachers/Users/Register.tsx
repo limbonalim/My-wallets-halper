@@ -46,9 +46,8 @@ const Register = () => {
 
 	const onSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
-
 		await dispatch(register(state)).unwrap();
-		navigate('/chat');
+		navigate('/');
 	};
 
 	return (
@@ -78,9 +77,9 @@ const Register = () => {
 								type="email"
 								value={state.email}
 								onChange={onChange}
-								error={Boolean(getFieldError('username'))}
-								helperText={getFieldError('username')}
-								autoComplete="new-username"
+								error={Boolean(getFieldError('email'))}
+								helperText={getFieldError('email')}
+								autoComplete="email"
 							/>
 						</Grid>
 						<Grid item xs={12}>
