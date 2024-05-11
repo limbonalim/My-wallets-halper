@@ -11,6 +11,7 @@ export interface INavigationItem {
   icon: string;
   type: 'button' | 'link';
   path?: string;
+  onClick?: () => void;
 }
 
 export interface ValidationError {
@@ -49,5 +50,16 @@ export interface IWallet {
   _id: string;
   name: string;
   type: WalletType;
+  amount: number;
+}
+
+export interface WalletFormState {
+  name: string;
+  amount: string;
+}
+
+export interface WalletFormStateMutation {
+  name: string;
+  type: string;
   amount: number;
 }

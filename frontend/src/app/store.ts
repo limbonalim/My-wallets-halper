@@ -11,6 +11,7 @@ import {
   persistStore,
 } from 'redux-persist';
 import { usersReducers } from '../feachers/Users/usersSlice.ts';
+import { walletsReduser } from '../feachers/Wallets/WalletsSlice.ts';
 
 const usersPersistConfig = {
   key: 'wallet:users',
@@ -19,6 +20,7 @@ const usersPersistConfig = {
 };
 
 const rootReducer = combineReducers({
+  wallets: walletsReduser,
   users: persistReducer(usersPersistConfig, usersReducers),
 });
 
