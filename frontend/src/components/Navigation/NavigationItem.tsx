@@ -41,7 +41,7 @@ const NavigationItem: React.FC<Props> = ({ item, index }) => {
   } else if (item.type === 'button') {
     return (
       <li key={index} className="Navigation__li">
-        <button className="Navigation__link button">
+        <button className="Navigation__link button" onClick={item.onClick}>
           {icon}
           <Typography className="Navigation__link__text">
             {item.title}
