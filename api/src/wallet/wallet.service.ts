@@ -15,7 +15,7 @@ export class WalletService {
     @InjectModel(Wallet.name) private walletModel: Model<WalletDocument>,
   ) {}
 
-  async getByUser(user: string) {
+  async getByUser(user: string, type: string) {
     let userId;
     try {
       userId = new Types.ObjectId(user);
@@ -23,7 +23,7 @@ export class WalletService {
       throw new BadRequestException('Something was wrong!');
     }
 
-    const answer = await this.walletModel.find({ user: userId });
+    const answer = await this.walletModel.find({ user: userId, type });
     if (!answer[0]) {
       throw new NotFoundException('Wallet is not found');
     }
