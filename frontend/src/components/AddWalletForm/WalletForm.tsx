@@ -59,13 +59,14 @@ const WalletForm: React.FC<Props> = ({ title, show, type }) => {
   return (
     show && (
       <>
-        {error ? <Alert severity="error" sx={{margin: '15px 0'}}>{error?.message}</Alert> : null}
+        {error ? (
+          <Alert severity="error" sx={{ margin: '15px 0' }}>
+            {error?.message}
+          </Alert>
+        ) : null}
         <div className="WalletForm__header">
           <Typography>{title} wallet</Typography>
-          <button
-            className="WalletForm__closeButton"
-            onClick={buttomCloseHandler}
-          >
+          <button className="Base_batton" onClick={buttomCloseHandler}>
             <XCircle size={32} color="#030303" />
           </button>
         </div>
