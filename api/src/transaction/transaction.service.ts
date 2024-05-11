@@ -11,6 +11,7 @@ import {
 } from 'src/schemas/transaction.schema';
 import { CreateTransactionDto } from './create-transaction.dto';
 import { Wallet, WalletDocument } from 'src/schemas/wallet.schema';
+import { UpdateTransactionDto } from './update-transaction.dto';
 
 @Injectable()
 export class TransactionService {
@@ -21,26 +22,32 @@ export class TransactionService {
     private walletModel: Model<WalletDocument>,
   ) {}
 
-  async getByWallet(wallet: string, user: string) {
+  private walletAndUserCheck(wallet: string, user: string) {
     let walletId;
     let userId;
     try {
       walletId = new Types.ObjectId(wallet);
       userId = new Types.ObjectId(user);
+      return { _id: walletId, user: userId };
     } catch (e) {
+      return null;
+    }
+  }
+
+  async getByWallet(wallet: string, user: string) {
+    const checkResult = this.walletAndUserCheck(wallet, user);
+    if (!checkResult) {
       throw new BadRequestException('Something was wrong!');
     }
 
-    const check = this.walletModel.findOne({
-      _id: walletId,
-      user: userId,
-    });
-
-    if (!check) {
+    const findInBase = this.walletModel.findOne(checkResult);
+    if (!findInBase) {
       throw new NotFoundException('Wallet is not found');
     }
 
-    const answer = await this.transactionModel.find({ wallet: walletId });
+    const answer = await this.transactionModel.find({
+      wallet: checkResult._id,
+    });
     if (!answer[0]) {
       throw new NotFoundException('Transactions is not found');
     }
@@ -52,21 +59,13 @@ export class TransactionService {
     user: string,
     wallet: string,
   ) {
-    let walletId;
-    let userId;
-    try {
-      walletId = new Types.ObjectId(wallet);
-      userId = new Types.ObjectId(user);
-    } catch (e) {
+    const checkResult = this.walletAndUserCheck(wallet, user);
+    if (!checkResult) {
       throw new BadRequestException('Something was wrong!');
     }
 
-    const check = this.walletModel.findOne({
-      _id: walletId,
-      user: userId,
-    });
-
-    if (!check) {
+    const findInBase = this.walletModel.findOne(checkResult);
+    if (!findInBase) {
       throw new NotFoundException('Wallet is not found');
     }
 
@@ -74,7 +73,48 @@ export class TransactionService {
       type: transactionDto.type,
       dataTime: transactionDto.dataTime,
       category: transactionDto.category,
-      wallet: walletId,
+      wallet: checkResult._id,
     });
+  }
+
+  async updateOne(data: UpdateTransactionDto, wallet: string, user: string) {
+    const checkResult = this.walletAndUserCheck(wallet, user);
+    if (!checkResult) {
+      throw new BadRequestException('Something was wrong!');
+    }
+
+    const findInBase = this.walletModel.findOne(checkResult);
+    if (!findInBase) {
+      throw new NotFoundException('Wallet is not found');
+    }
+
+    const answer = await this.transactionModel.updateOne(
+      { wallet: checkResult._id },
+      { type: data.type, category: data.category, dataTime: data.dataTime },
+    );
+    if (answer.matchedCount === 1) {
+      return { message: 'seccsess' };
+    }
+    return new NotFoundException({ messaage: 'Transaction is not found!' });
+  }
+
+  async deleteOne(wallet: string, user: string) {
+    const checkResult = this.walletAndUserCheck(wallet, user);
+    if (!checkResult) {
+      throw new BadRequestException('Something was wrong!');
+    }
+
+    const findInBase = this.walletModel.findOne(checkResult);
+    if (!findInBase) {
+      throw new NotFoundException('Wallet is not found');
+    }
+
+    const answer = await this.transactionModel.deleteOne({
+      wallet: checkResult._id,
+    });
+    if (answer.deletedCount === 1) {
+      return { message: 'seccsess' };
+    }
+    return new NotFoundException({ messaage: 'Transaction is not found!' });
   }
 }
