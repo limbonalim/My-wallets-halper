@@ -1,0 +1,11 @@
+.AddButton {
+    border: none;
+    background: transparent;
+    padding: 15px 0;
+    display: block;
+    margin: 0 auto;
+    &:hover * {
+        transition: all 200ms;
+        fill: #0809FE;
+    }
+}
