@@ -8,6 +8,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   Req,
   Res,
   UnprocessableEntityException,
@@ -24,8 +25,8 @@ export class WalletController {
   constructor(private readonly walletService: WalletService) {}
   @UseGuards(TokenAuthGuard)
   @Get()
-  getByUser(@Req() req: Request) {
-    return this.walletService.getByUser(req.user.toString());
+  getByUser(@Req() req: Request, @Query('type') type: string) {
+    return this.walletService.getByUser(req.user.toString(), type);
   }
 
   @UseGuards(TokenAuthGuard)
