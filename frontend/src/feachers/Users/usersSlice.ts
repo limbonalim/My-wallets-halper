@@ -1,14 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store.ts';
 import { login, register } from './usersThunks.ts';
-import type { IMyError, IUser, ValidationError } from '../../types';
+import type { ApiError, IUser, ValidationError } from '../../types';
 
 interface IUsersState {
-	user: IUser | null;
-	isRegisterLoading: boolean;
-	registerError: ValidationError | null;
-	isLoginLoading: boolean;
-	loginError: IMyError | null;
+  user: IUser | null;
+  isRegisterLoading: boolean;
+  registerError: ValidationError | null;
+  isLoginLoading: boolean;
+  loginError: ApiError | null;
 }
 
 const initialState: IUsersState = {

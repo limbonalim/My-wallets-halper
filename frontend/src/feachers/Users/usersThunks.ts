@@ -3,7 +3,7 @@ import { isAxiosError } from 'axios';
 import axiosApi from '../../axiosApi.ts';
 import {
 	ILoginForm,
-	IMyError,
+	ApiError,
 	IRegisterForm,
 	IUser,
 	ValidationError,
@@ -29,23 +29,22 @@ export const register = createAsyncThunk<
 	}
 });
 
-export const login = createAsyncThunk<
-	IUser,
-	ILoginForm,
-	{ rejectValue: IMyError }
->('users/login', async (loginData, { rejectWithValue }) => {
-	try {
-		const response = await axiosApi.post<IUser>('/users/sessions', loginData);
+export const login = createAsyncThunk<IUser, ILoginForm, { rejectValue: ApiError }>(
+  'users/login',
+  async (loginData, { rejectWithValue }) => {
+    try {
+      const response = await axiosApi.post<IUser>('/users/sessions', loginData);
 
-		return response.data;
-	} catch (e) {
-		if (isAxiosError(e) && e.response && e.response.status === 422) {
-			return rejectWithValue(e.response.data);
-		}
+      return response.data;
+    } catch (e) {
+      if (isAxiosError(e) && e.response && e.response.status === 401) {
+        return rejectWithValue(e.response.data);
+      }
 
-		throw e;
-	}
-});
+      throw e;
+    }
+  },
+);
 
 export const logout = createAsyncThunk<void, void, { state: RootState }>(
 	'users/logout',
