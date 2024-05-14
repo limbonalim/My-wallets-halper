@@ -30,6 +30,21 @@ export class WalletService {
     return answer;
   }
 
+  async getOne(user: string, id: string) {
+    let userId;
+    try {
+      userId = new Types.ObjectId(user);
+    } catch (e) {
+      throw new BadRequestException('Something was wrong!');
+    }
+
+    const answer = await this.walletModel.find({ user: userId, _id: id });
+    if (!answer[0]) {
+      throw new NotFoundException('Wallet is not found');
+    }
+    return answer[0];
+  }
+
   async createOne(walletDto: CreateWalletDto, user: string) {
     let userId;
     try {

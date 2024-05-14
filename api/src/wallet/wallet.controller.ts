@@ -30,6 +30,12 @@ export class WalletController {
   }
 
   @UseGuards(TokenAuthGuard)
+  @Get(':id')
+  async getOne(@Req() req: Request, @Param('id') id: string) {
+    return await this.walletService.getOne(req.user.toString(), id);
+  }
+
+  @UseGuards(TokenAuthGuard)
   @Post()
   async createOne(
     @Body() data: CreateWalletDto,
