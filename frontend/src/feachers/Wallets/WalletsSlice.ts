@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { createWallet, getWallets } from './WalletsThunks';
+import { createWallet, getWallets, updateWallet } from './WalletsThunks';
 import { ApiError, IWallet } from '../../types';
 import { RootState } from '../../app/store';
 
@@ -8,8 +8,8 @@ interface WalletsState {
   isLoading: boolean;
   error: ApiError | null;
   showForm: boolean;
-  isCreateLoading: boolean;
-  createError: ApiError | null;
+  isFormLoading: boolean;
+  formError: ApiError | null;
 }
 
 const initialState: WalletsState = {
@@ -17,8 +17,8 @@ const initialState: WalletsState = {
   isLoading: false,
   error: null,
   showForm: false,
-  isCreateLoading: false,
-  createError: null,
+  isaFormLoading: false,
+  formError: null,
 };
 
 const walletsSlice = createSlice({
@@ -30,7 +30,7 @@ const walletsSlice = createSlice({
     },
     closeForm: (state) => {
       state.showForm = false;
-      state.createError = null;
+      state.formError = null;
     },
   },
   extraReducers: (builder) => {
@@ -51,16 +51,29 @@ const walletsSlice = createSlice({
 
     builder
       .addCase(createWallet.pending, (state) => {
-        state.isCreateLoading = true;
-        state.createError = null;
+        state.isFormLoading = true;
+        state.formError = null;
       })
       .addCase(createWallet.fulfilled, (state) => {
-        state.isCreateLoading = false;
+        state.isFormLoading = false;
       })
       .addCase(createWallet.rejected, (state, { payload: error }) => {
-        state.isCreateLoading = false;
-        state.createError = error || null;
+        state.isFormLoading = false;
+        state.formError = error || null;
       });
+
+      builder
+        .addCase(updateWallet.pending, (state) => {
+          state.isFormLoading = true;
+          state.formError = null;
+        })
+        .addCase(updateWallet.fulfilled, (state) => {
+          state.isFormLoading = false;
+        })
+        .addCase(updateWallet.rejected, (state, { payload: error }) => {
+          state.isFormLoading = false;
+          state.formError = error || null;
+        });
   },
 });
 
@@ -68,10 +81,10 @@ export const selectWallets = (state: RootState) => state.wallets.wallets;
 export const selectIsLoading = (state: RootState) => state.wallets.isLoading;
 export const selectError = (state: RootState) => state.wallets.error;
 export const selectShowForm = (state: RootState) => state.wallets.showForm;
-export const selectIsCreateLoading = (state: RootState) =>
-  state.wallets.isCreateLoading;
-export const selectCreateError = (state: RootState) =>
-  state.wallets.createError;
+export const selectIsFormLoading = (state: RootState) =>
+  state.wallets.isFormLoading;
+export const selectFormError = (state: RootState) =>
+  state.wallets.formError;
 
 export const { showForm, closeForm } = walletsSlice.actions;
 

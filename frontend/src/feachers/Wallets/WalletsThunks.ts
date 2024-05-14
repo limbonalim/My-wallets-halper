@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axiosApi from '../../axiosApi';
-import { ApiError, IWallet, WalletFormStateMutation } from '../../types';
+import { ApiError, IWallet, UpdateWalletFormData, WalletFormStateMutation } from '../../types';
 import { isAxiosError } from 'axios';
 
 export const getWallets = createAsyncThunk<
@@ -29,6 +29,27 @@ export const createWallet = createAsyncThunk<
 >('wallets/createWallet', async (wallet, { rejectWithValue }) => {
   try {
     await axiosApi.post('/wallets', wallet);
+  } catch (e) {
+    if (isAxiosError(e) && e.response && e.response.status === 422) {
+      return rejectWithValue(e.response.data);
+    }
+    if (isAxiosError(e) && e.response && e.response.status === 403) {
+      return rejectWithValue(e.response.data);
+    }
+    if (isAxiosError(e) && e.response && e.response.status === 400) {
+      return rejectWithValue(e.response.data);
+    }
+    throw e;
+  }
+});
+
+export const updateWallet = createAsyncThunk<
+  void,
+  UpdateWalletFormData,
+  { rejectValue: ApiError }
+>('wallets/updateWallet', async (data, { rejectWithValue }) => {
+  try {
+    await axiosApi.patch(`/wallets/${data.id}`, data.wallet);
   } catch (e) {
     if (isAxiosError(e) && e.response && e.response.status === 422) {
       return rejectWithValue(e.response.data);
