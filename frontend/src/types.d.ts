@@ -55,6 +55,7 @@ export interface IWallet {
 
 export interface WalletFormState {
   name: string;
+  type: string;
   amount: string;
 }
 
@@ -62,4 +63,15 @@ export interface WalletFormStateMutation {
   name: string;
   type: string;
   amount: number;
+}
+
+export interface UpdateWalletFormData {
+  wallet: WalletFormStateMutation;
+  id: string;
+}
+
+export interface ITransaction {
+  type: string;
+  dataTime: string;
+  category: string;
 }
