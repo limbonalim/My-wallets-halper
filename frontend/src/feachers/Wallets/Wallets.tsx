@@ -17,7 +17,6 @@ import WalletForm from '../../components/AddWalletForm/WalletForm';
 import Wallet from '../../components/wallet/Wallet';
 import './Wallets.scss';
 
-
 const Wallets = () => {
   const { type } = useParams();
   const dispatch = useAppDispatch();
@@ -50,9 +49,10 @@ const Wallets = () => {
         </div>
         <Typography>{type}</Typography>
       </div>
-      <div>
+      <div className="Wallets__walletsWrapper">
         {wallets.map((item) => (
           <Wallet
+            key={item._id}
             _id={item._id}
             amount={item.amount}
             name={item.name}
