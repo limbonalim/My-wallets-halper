@@ -3,20 +3,6 @@
   flex-direction: column;
   gap: 20px;
 
-  &__input {
-    border: 1px solid #989898;
-    border-radius: 30px;
-    font-size: 20px;
-    padding: 14px;
-    color: #989898;
-  }
-
-  &__input[type='number']::-webkit-inner-spin-button,
-  &__input[type='number']::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
-
   &__header {
     display: flex;
     justify-content: space-between;

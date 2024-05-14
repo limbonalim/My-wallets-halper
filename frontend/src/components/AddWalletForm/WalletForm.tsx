@@ -1,36 +1,64 @@
-import { Alert, Typography, styled } from '@mui/material';
-import React, { useState } from 'react';
-import { LoadingButton } from '@mui/lab';
+import { Alert, Typography } from '@mui/material';
+import React, { useEffect, useState } from 'react';
 import { XCircle } from '@phosphor-icons/react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
   closeForm,
-  selectCreateError,
-  selectIsCreateLoading,
+  selectFormError,
+  selectIsFormLoading,
 } from '../../feachers/Wallets/WalletsSlice';
-import { createWallet, getWallets } from '../../feachers/Wallets/WalletsThunks';
-import { WalletFormState, WalletFormStateMutation } from '../../types';
+import {
+  createWallet,
+  getWallets,
+  updateWallet,
+} from '../../feachers/Wallets/WalletsThunks';
+import { WalletTypeSelectData } from '../../constants';
+import {
+  IWallet,
+  UpdateWalletFormData,
+  WalletFormState,
+  WalletFormStateMutation,
+} from '../../types';
 import './WalletForm.scss';
+import FormSubmitButton from '../ui/FormSubmitButton/FormSubmitButton';
 
 interface Props {
   title: 'Edit' | 'Create';
   show: boolean;
   type?: string;
+  onClose?: () => void;
+  editData?: IWallet;
 }
 
-const MYButton = styled(LoadingButton)(({ theme }) => ({
-  border: '1px solid #989898',
-  borderRadius: '30px',
-  padding: 10,
-}));
-
-const WalletForm: React.FC<Props> = ({ title, show, type }) => {
-  const [state, setState] = useState<WalletFormState>({ name: '', amount: '' });
+const WalletForm: React.FC<Props> = ({
+  title,
+  show,
+  type,
+  onClose,
+  editData,
+}) => {
+  const [state, setState] = useState<WalletFormState>({
+    name: '',
+    type: '',
+    amount: '',
+  });
   const dispatch = useAppDispatch();
-  const isLoading = useAppSelector(selectIsCreateLoading);
-  const error = useAppSelector(selectCreateError);
+  const isLoading = useAppSelector(selectIsFormLoading);
+  const error = useAppSelector(selectFormError);
 
-  const inputChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+  useEffect(() => {
+    if (editData) {
+      setState({
+        name: editData.name,
+        type: editData.type,
+        amount: editData.amount.toString(),
+      });
+    }
+  }, [editData]);
+
+  const inputChangeHandler = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => {
     const { name, value } = e.target;
     setState((prevState) => {
       return { ...prevState, [name]: value };
@@ -45,15 +73,25 @@ const WalletForm: React.FC<Props> = ({ title, show, type }) => {
       amount: parseFloat(state.amount),
       type,
     };
-    await dispatch(createWallet(wallet)).unwrap();
-    await dispatch(getWallets(type));
+    if (!editData) {
+      await dispatch(createWallet(wallet)).unwrap();
+      await dispatch(getWallets(type));
+    } else {
+      const data: UpdateWalletFormData = {
+        wallet: wallet,
+        id: editData._id,
+      };
+      await dispatch(updateWallet(data)).unwrap();
+    }
+    onClose ? onClose() : null;
     dispatch(closeForm());
-    setState({ name: '', amount: '' });
+    setState({ name: '', type: '', amount: '' });
   };
 
   const buttomCloseHandler = () => {
     dispatch(closeForm());
-    setState({ name: '', amount: '' });
+    onClose ? onClose() : null;
+    setState({ name: '', type: '', amount: '' });
   };
 
   return (
@@ -80,9 +118,27 @@ const WalletForm: React.FC<Props> = ({ title, show, type }) => {
               value={state.name}
               id="name"
               name="name"
-              className="WalletForm__input"
+              className="Base_input"
               required
             />
+            <label form="type">
+              <Typography>Type</Typography>
+            </label>
+            <select
+              onChange={inputChangeHandler}
+              value={state.type}
+              id="type"
+              name="type"
+              className="Base_input Base_input_select"
+              required
+            >
+              <option value="">empty</option>
+              {WalletTypeSelectData.map((type) => (
+                <option key={type} value={type}>
+                  {type}
+                </option>
+              ))}
+            </select>
             <label form="amount">
               <Typography>Amount</Typography>
             </label>
@@ -91,13 +147,11 @@ const WalletForm: React.FC<Props> = ({ title, show, type }) => {
               value={state.amount}
               id="amount"
               name="amount"
-              className="WalletForm__input"
+              className="Base_input"
               type="number"
               required
             />
-            <MYButton loading={isLoading} variant="outlined" type="submit">
-              {title}
-            </MYButton>
+            <FormSubmitButton isLoading={isLoading} title={title} />
           </div>
         </form>
       </>
