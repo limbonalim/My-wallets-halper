@@ -62,7 +62,7 @@ const WalletForm: React.FC<Props> = ({
     const { name, value } = e.target;
     setState((prevState) => {
       return { ...prevState, [name]: value };
-    });
+    }); 
   };
 
   const formSubmitHandler = async (e: React.FormEvent) => {
@@ -73,10 +73,16 @@ const WalletForm: React.FC<Props> = ({
       amount: parseFloat(state.amount),
       type,
     };
+    
     if (!editData) {
       await dispatch(createWallet(wallet)).unwrap();
       await dispatch(getWallets(type));
     } else {
+      const wallet: WalletFormStateMutation = {
+        name: state.name,
+        amount: parseFloat(state.amount),
+        type: state.type
+      };
       const data: UpdateWalletFormData = {
         wallet: wallet,
         id: editData._id,
