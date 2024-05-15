@@ -15,6 +15,7 @@ import { WalletController } from './wallet/wallet.controller';
 import { WalletService } from './wallet/wallet.service';
 import { TransactionController } from './transaction/transaction.controller';
 import { TransactionService } from './transaction/transaction.service';
+import { FixturesService } from './fixtures/fixtures.service';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { TransactionService } from './transaction/transaction.service';
     LocalStrategy,
     WalletService,
     TransactionService,
+    FixturesService
   ],
 })
 export class AppModule {}
