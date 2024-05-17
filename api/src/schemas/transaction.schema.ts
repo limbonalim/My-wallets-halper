@@ -30,6 +30,8 @@ export class Transaction {
   category: string;
   @Prop({ required: true, ref: Wallet.name })
   wallet: MongooseSchema.Types.ObjectId;
+  @Prop({required: true})
+  amount: number;
 }
 
 export const TransactionSchema = SchemaFactory.createForClass(Transaction);

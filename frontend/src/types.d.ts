@@ -71,7 +71,9 @@ export interface UpdateWalletFormData {
 }
 
 export interface ITransaction {
+  _id: string;
   type: string;
   dataTime: string;
   category: string;
+  amount: number;
 }
