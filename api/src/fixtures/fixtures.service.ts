@@ -24,6 +24,9 @@ export class FixturesService {
     void this.createFixture();
   }
 
+  private TransactionTypeArr = Object.values(TransactionType);
+  private TransactionCategoryArr = Object.values(TransactionCategory);
+
   async dropCollection(db: mongoose.Connection, collectionName: string) {
     try {
       console.log('dropping db');
@@ -107,120 +110,24 @@ export class FixturesService {
       },
     ]);
 
-   await this.transactionModel.create([
-     {
-       type: TransactionType.income,
-       category: TransactionCategory.salary,
-       wallet: walletAdminCard,
-     },
-     {
-       type: TransactionType.outcome,
-       category: TransactionCategory.food,
-       wallet: walletAdminCard,
-     },
-     {
-       type: TransactionType.income,
-       category: TransactionCategory.salary,
-       wallet: walletAdminCrypto,
-     },
-     {
-       type: TransactionType.income,
-       category: TransactionCategory.clothes,
-       wallet: walletAdminWallet,
-     },
-     {
-       type: TransactionType.income,
-       category: TransactionCategory.clothes,
-       wallet: walletAdminCard,
-     },
-     {
-       type: TransactionType.income,
-       category: TransactionCategory.clothes,
-       wallet: walletAdminCrypto,
-     },
-     {
-       type: TransactionType.income,
-       category: TransactionCategory.clothes,
-       wallet: walletAdminWallet,
-     },
-     {
-       type: TransactionType.income,
-       category: TransactionCategory.clothes,
-       wallet: walletUserCard,
-     },
-     {
-       type: TransactionType.income,
-       category: TransactionCategory.clothes,
-       wallet: walletUserCrypto,
-     },
-     {
-       type: TransactionType.income,
-       category: TransactionCategory.clothes,
-       wallet: walletUserWallet,
-     },
-     {
-       type: TransactionType.income,
-       category: TransactionCategory.clothes,
-       wallet: walletUserCrypto,
-     },
-     {
-       type: TransactionType.income,
-       category: TransactionCategory.clothes,
-       wallet: walletUserCrypto,
-     },
-     {
-       type: TransactionType.income,
-       category: TransactionCategory.clothes,
-       wallet: walletUserWallet,
-     },
-     {
-       type: TransactionType.income,
-       category: TransactionCategory.clothes,
-       wallet: walletAdminCard,
-     },
-     {
-       type: TransactionType.income,
-       category: TransactionCategory.clothes,
-       wallet: walletUserCrypto,
-     },
-     {
-       type: TransactionType.income,
-       category: TransactionCategory.clothes,
-       wallet: walletUserWallet,
-     },
-     {
-       type: TransactionType.income,
-       category: TransactionCategory.clothes,
-       wallet: walletAdminCard,
-     },
-     {
-       type: TransactionType.income,
-       category: TransactionCategory.clothes,
-       wallet: walletAdminCard,
-     },
-     {
-       type: TransactionType.income,
-       category: TransactionCategory.clothes,
-       wallet: walletUserWallet,
-     },
-     {
-       type: TransactionType.income,
-       category: TransactionCategory.clothes,
-       wallet: walletUserCrypto,
-     },
-     {
-       type: TransactionType.income,
-       category: TransactionCategory.clothes,
-       wallet: walletUserWallet,
-     },
-     {
-       type: TransactionType.income,
-       category: TransactionCategory.clothes,
-       wallet: walletAdminCard,
-     },
-   ]);
+    await this.createTransactions(walletAdminCard);
+    await this.createTransactions(walletAdminCrypto);
+    await this.createTransactions(walletAdminWallet);
+    await this.createTransactions(walletUserCard);
+    await this.createTransactions(walletUserCrypto);
+    await this.createTransactions(walletUserWallet);
 
     await db.close();
   }
-}
 
+  async createTransactions (wallet) {
+    for (let j = 0; j < this.TransactionCategoryArr.length - 1; j++) {
+      await this.transactionModel.create({
+        type: j % 2 === 0 ? TransactionType.income : TransactionType.outcome,
+        category: this.TransactionCategoryArr[j],
+        wallet,
+        amount: Math.floor(Math.random() * 50),
+      });
+    }
+  }
+}
