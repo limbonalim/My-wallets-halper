@@ -8,7 +8,7 @@ const data = {}
 
 const Home = () => {
     return (
-      <div className='Home__category'>
+      <div className="Home__category">
         <WalletCategory type={WalletType.card} />
         <WalletCategory type={WalletType.wallet} />
         <WalletCategory type={WalletType.crypto} />

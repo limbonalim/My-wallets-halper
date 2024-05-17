@@ -2,6 +2,8 @@ import { Alert, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import { ApiError } from '../../types';
 import { TransactionTypeSelectData } from '../../constants';
+import FormSubmitButton from '../ui/FormSubmitButton/FormSubmitButton';
+import { XCircle } from '@phosphor-icons/react';
 
 export interface TransactionFormMutation {
   type: string;
@@ -9,8 +11,12 @@ export interface TransactionFormMutation {
   dateTime: string;
 }
 
-const TransactionForm = () => {
-  const show = true;
+interface Props {
+  title: 'Edit' | 'Create';
+  show: boolean;
+}
+
+const TransactionForm: React.FC<Props> = ({title, show}) => {
   const [state, setState] = useState<TransactionFormMutation>({
     type: '',
     category: '',
@@ -30,6 +36,10 @@ const TransactionForm = () => {
     e.preventDefault();
   };
 
+  const buttonCloseHandler = () => {
+
+  }
+
   return (
     show && (
       <>
@@ -39,6 +49,12 @@ const TransactionForm = () => {
             </Alert>
           ) : null} */}
         <div>
+          <div className="WalletForm__header">
+            <Typography>{title} wallet</Typography>
+            <button className="Base_batton" onClick={buttonCloseHandler}>
+              <XCircle size={32} color="#030303" />
+            </button>
+          </div>
           <form onSubmit={formSubmitHandler}>
             <label form="type">
               <Typography>Type</Typography>
@@ -76,6 +92,17 @@ const TransactionForm = () => {
                 </option>
               ))}
             </select>
+            <label form="dateTime">
+              <Typography>Data</Typography>
+            </label>
+            <input
+              onChange={inputChangeHandler}
+              value={state.dateTime}
+              id="dateTime"
+              name="dateTime"
+              type="date"
+            />
+            <FormSubmitButton isLoading={isLoading} title={title} />
           </form>
         </div>
       </>
