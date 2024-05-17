@@ -40,8 +40,8 @@ export class TransactionService {
       throw new BadRequestException('Something was wrong!');
     }
 
-    const findInBase = this.walletModel.findOne(checkResult);
-    if (!findInBase) {
+    const wallets = await this.walletModel.findOne(checkResult);
+    if (!wallets) {
       throw new NotFoundException('Wallet is not found');
     }
 
@@ -51,6 +51,28 @@ export class TransactionService {
     if (!answer[0]) {
       throw new NotFoundException('Transactions is not found');
     }
+    return answer;
+  }
+
+  async getAll(user: string) {
+    let userId;
+    try {
+      userId = new Types.ObjectId(user);
+    } catch (e) {
+      throw new BadRequestException('Something was wrong!');
+    }
+    const wallets = await this.walletModel.find({ user: userId });
+    if (!wallets[0]) {
+      throw new NotFoundException('Wallets is not found');
+    }
+
+    const answer = [];
+    wallets.forEach(async (item) => {
+      const result = await this.transactionModel.find({
+        wallet: item._id,
+      });
+      answer.push(...result);
+    });
     return answer;
   }
 

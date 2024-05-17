@@ -30,6 +30,12 @@ export class TransactionController {
   }
 
   @UseGuards(TokenAuthGuard)
+  @Get()
+  getAll(@Req() req: Request) {
+    return this.transactionService.getAll(req.user.toString());
+  }
+
+  @UseGuards(TokenAuthGuard)
   @Post(':wallet')
   async createOne(
     @Param('wallet') wallet: string,
@@ -59,11 +65,7 @@ export class TransactionController {
     @Body() data: UpdateTransactionDto,
     @Req() req: Request,
   ) {
-    return this.transactionService.updateOne(
-      data,
-      req.user.toString(),
-      wallet,
-    );
+    return this.transactionService.updateOne(data, req.user.toString(), wallet);
   }
 
   @UseGuards(TokenAuthGuard)
