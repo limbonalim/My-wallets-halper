@@ -1,12 +1,30 @@
 body {
-    margin: 0;
+  margin: 0;
 }
 
 .Base_batton {
-    background: transparent;
-    border: none;
-    &:hover * {
-      transition: all 200ms;
-      fill: #0809fe;
-    }
+  background: transparent;
+  border: none;
+  &:hover * {
+    transition: all 200ms;
+    fill: #0809fe;
+  }
+}
+
+.Base_input {
+  border: 1px solid #989898;
+  border-radius: 30px;
+  font-size: 20px;
+  padding: 14px;
+  color: #989898;
+
+  &_select {
+    -webkit-appearance: none;
+  }
+
+  &[type='number']::-webkit-inner-spin-button,
+  &[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
 }
