@@ -1,12 +1,18 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { Typography } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { selectTransactions, selectWallet } from './TransactionsSlice';
 import { getTransactions, getWallet } from './TransactionsThunks';
 import Wallet from '../../components/wallet/Wallet';
 import Transaction from '../../components/Transaction/Transaction';
+import './Transactions.scss';
+import TansactionsStyle from './Transactions-style';
+import AddButton from '../../components/ui/AddButton/AddButton';
+import TransactionForm from '../../components/TransactionForm/TransactionForm';
 
 const Transactions = () => {
+  const [openForm, setOpenForm] = useState<boolean>(false);
   const { type, id } = useParams();
   const wallet = useAppSelector(selectWallet);
   const dispatch = useAppDispatch();
@@ -25,6 +31,10 @@ const Transactions = () => {
     void getData();
   }, [dispatch, id]);
 
+  const onCloseForm = () => {
+    setOpenForm((prev) => !prev);
+  };
+
   return (
     <>
       <div>
@@ -37,7 +47,26 @@ const Transactions = () => {
           />
         ) : null}
       </div>
+
+      {wallet && (
+        <>
+          <AddButton onClick={onCloseForm} />
+          <TransactionForm
+            title="Create"
+            show={openForm}
+            onClose={onCloseForm}
+            wallet={wallet?._id}
+          />
+        </>
+      )}
+
       <div>
+        <div className="Transactions__table_head">
+          <Typography sx={TansactionsStyle.tableHead}>Type</Typography>
+          <Typography sx={TansactionsStyle.tableHead}>Amount</Typography>
+          <Typography sx={TansactionsStyle.tableHead}>Category</Typography>
+          <Typography sx={TansactionsStyle.tableHead}>Data</Typography>
+        </div>
         {transactions.map((item) => (
           <Transaction
             key={item._id}

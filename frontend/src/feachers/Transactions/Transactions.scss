@@ -1,0 +1,8 @@
+.Transactions {
+  &__table_head {
+    display: grid;
+    grid-template-columns: repeat(4, 25%);
+    margin-bottom: 15px;
+    border-bottom: 1px solid gray;
+  }
+}
