@@ -1,0 +1,15 @@
+.Transaction {
+  margin-bottom: 15px;
+  border-bottom: 1px solid gray;
+  &__flex {
+    display: grid;
+    grid-template-columns: repeat(4, 25%);
+    grid-template-rows: 1fr, 40px;
+  }
+
+  &__buttons {
+    display: flex;
+    justify-content: end;
+    gap: 20px;
+  }
+}
