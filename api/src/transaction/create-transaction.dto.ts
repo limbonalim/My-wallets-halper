@@ -1,4 +1,4 @@
-import { IsDate, IsEnum, IsNumber, IsPositive } from 'class-validator';
+import { IsEnum, IsNumber, IsPositive, IsDateString } from 'class-validator';
 import {
   TransactionCategory,
   TransactionType,
@@ -7,8 +7,8 @@ import {
 export class CreateTransactionDto {
   @IsEnum(TransactionType)
   type: string;
-  @IsDate()
-  dataTime: string;
+  @IsDateString()
+  dataTime?: string;
   @IsEnum(TransactionCategory)
   category: string;
   @IsNumber()

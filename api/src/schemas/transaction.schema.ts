@@ -24,13 +24,13 @@ export enum TransactionCategory {
 export class Transaction {
   @Prop({ required: true, enum: TransactionType })
   type: string;
-  @Prop({ required: true, default: Date.now })
+  @Prop({ required: true })
   dataTime: string;
   @Prop({ required: true, enum: TransactionCategory })
   category: string;
   @Prop({ required: true, ref: Wallet.name })
   wallet: MongooseSchema.Types.ObjectId;
-  @Prop({required: true})
+  @Prop({ required: true })
   amount: number;
 }
 

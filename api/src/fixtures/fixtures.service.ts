@@ -127,6 +127,7 @@ export class FixturesService {
         category: this.TransactionCategoryArr[j],
         wallet,
         amount: Math.floor(Math.random() * 50),
+        dataTime: new Date().toISOString()
       });
     }
   }

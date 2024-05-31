@@ -1,4 +1,10 @@
-import { IsDate, IsEnum, IsNumber, IsOptional, IsPositive } from 'class-validator';
+import {
+  IsEnum,
+  IsNumber,
+  IsOptional,
+  IsPositive,
+  IsDateString,
+} from 'class-validator';
 import {
   TransactionCategory,
   TransactionType,
@@ -9,11 +15,12 @@ export class UpdateTransactionDto {
   @IsEnum(TransactionType)
   type?: string;
   @IsOptional()
-  @IsDate()
+  @IsDateString()
   dataTime?: string;
   @IsOptional()
   @IsEnum(TransactionCategory)
   category?: string;
+  @IsOptional()
   @IsNumber()
   @IsPositive()
   amount?: number;
