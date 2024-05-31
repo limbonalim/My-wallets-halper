@@ -1,7 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { ApiError, ITransaction, IWallet } from '../../types';
 import { RootState } from '../../app/store';
-import { getTransactions, getWallet } from './TransactionsThunks';
+import {
+  createTransaction,
+  getTransactions,
+  getWallet,
+  updateTransaction,
+} from './TransactionsThunks';
 
 interface TransactionState {
   wallet: IWallet | null;
@@ -10,6 +15,8 @@ interface TransactionState {
   walletError: ApiError | null;
   isTransactionsLoading: boolean;
   transactionsError: ApiError | null;
+  isCreateLoading: boolean;
+  createError: ApiError | null;
 }
 
 const initialState: TransactionState = {
@@ -19,6 +26,8 @@ const initialState: TransactionState = {
   walletError: null,
   isTransactionsLoading: false,
   transactionsError: null,
+  isCreateLoading: false,
+  createError: null,
 };
 
 const transactionsSlice = createSlice({
@@ -58,6 +67,32 @@ const transactionsSlice = createSlice({
         state.isTransactionsLoading = false;
         state.transactionsError = error || null;
       });
+
+    builder
+      .addCase(createTransaction.pending, (state) => {
+        state.isCreateLoading = true;
+        state.createError = null;
+      })
+      .addCase(createTransaction.fulfilled, (state) => {
+        state.isCreateLoading = false;
+      })
+      .addCase(createTransaction.rejected, (state, { payload: error }) => {
+        state.isCreateLoading = false;
+        state.createError = error || null;
+      });
+
+      builder
+        .addCase(updateTransaction.pending, (state) => {
+          state.isCreateLoading = true;
+          state.createError = null;
+        })
+        .addCase(updateTransaction.fulfilled, (state) => {
+          state.isCreateLoading = false;
+        })
+        .addCase(updateTransaction.rejected, (state, { payload: error }) => {
+          state.isCreateLoading = false;
+          state.createError = error || null;
+        });
   },
 });
 
@@ -72,5 +107,9 @@ export const selectIsTransactionsLoading = (state: RootState) =>
   state.transactions.isTransactionsLoading;
 export const selectTransactionsError = (state: RootState) =>
   state.transactions.transactionsError;
+export const selectIsCreateLoading = (state: RootState) =>
+  state.transactions.isCreateLoading;
+export const selectCreateError = (state: RootState) =>
+  state.transactions.createError;
 
 export const transactionsReduser = transactionsSlice.reducer;

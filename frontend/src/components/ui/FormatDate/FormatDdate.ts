@@ -26,6 +26,11 @@ class FormatDate {
     );
   }
 
+  getInputFormatDate() {
+    const result = this.datetimeRegex.exec(this.date) as RegExpExecArray;
+    return `${result[3]}-${result[2]}-${result[1]}`;
+  }
+
   getFormatDate() {
     const currentDataArr = this.datetimeRegex.exec(
       this.currentData,
