@@ -77,3 +77,26 @@ export interface ITransaction {
   category: string;
   amount: number;
 }
+
+export interface TransactionFormState {
+  type: string;
+  category: string;
+  amount: string;
+  dataTime: string;
+}
+
+export interface TransactionFormStateMutation {
+  type: string;
+  dataTime: string;
+  category: string;
+  amount: number;
+}
+
+export interface TransactionFormData {
+  wallet: string;
+  transaction: TransactionFormStateMutation;
+}
+
+export interface UpdateTransactionFormData extends TransactionFormData {
+  transactionId: string;
+}
