@@ -11,6 +11,15 @@ body {
   }
 }
 
+.Base_batton_delete {
+  background: transparent;
+  border: none;
+  &:hover * {
+    transition: all 200ms;
+    fill: red;
+  }
+}
+
 .Base_input {
   border: 1px solid #989898;
   border-radius: 30px;
