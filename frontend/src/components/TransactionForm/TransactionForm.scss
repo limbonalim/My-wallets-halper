@@ -1,0 +1,20 @@
+.TransactionForm {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-content: center;
+  }
+
+  &__closeButton {
+    background: transparent;
+    border: none;
+    &:hover * {
+      transition: all 200ms;
+      fill: #0809fe;
+    }
+  }
+}
