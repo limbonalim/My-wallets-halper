@@ -8,6 +8,7 @@ import { Model, Types } from 'mongoose';
 import {
   Transaction,
   TransactionDocument,
+  TransactionType,
 } from 'src/schemas/transaction.schema';
 import { CreateTransactionDto } from './create-transaction.dto';
 import { Wallet, WalletDocument } from 'src/schemas/wallet.schema';
@@ -86,53 +87,101 @@ export class TransactionService {
       throw new BadRequestException('Something was wrong!');
     }
 
-    const findInBase = this.walletModel.findOne(checkResult);
+    const findInBase = await this.walletModel.findOne(checkResult);
     if (!findInBase) {
       throw new NotFoundException('Wallet is not found');
     }
-
-    return await this.transactionModel.create({
+    const answer = await this.transactionModel.create({
       type: transactionDto.type,
       dataTime: transactionDto.dataTime,
+      amount: transactionDto.amount,
       category: transactionDto.category,
       wallet: checkResult._id,
     });
+
+    if (transactionDto.type === TransactionType.income) {
+      await this.walletModel.updateOne(checkResult, {
+        amount: findInBase.amount + answer.amount,
+      });
+    } else if (transactionDto.type === TransactionType.outcome) {
+      await this.walletModel.updateOne(checkResult, {
+        amount: findInBase.amount - answer.amount,
+      });
+    }
+
+    return answer;
   }
 
-  async updateOne(data: UpdateTransactionDto, wallet: string, user: string) {
+  async updateOne(
+    data: UpdateTransactionDto,
+    user: string,
+    wallet: string,
+    transaction: string,
+  ) {
     const checkResult = this.walletAndUserCheck(wallet, user);
     if (!checkResult) {
       throw new BadRequestException('Something was wrong!');
     }
 
-    const findInBase = this.walletModel.findOne(checkResult);
-    if (!findInBase) {
+    const currentWallet = await this.walletModel.findOne(checkResult);
+    if (!currentWallet) {
       throw new NotFoundException('Wallet is not found');
+    }
+
+    const currentTransaction = await this.transactionModel.findOne({
+      _id: new Types.ObjectId(transaction),
+      wallet: checkResult._id,
+    });
+    if (!currentWallet) {
+      throw new NotFoundException('Transaction is not found');
     }
 
     const answer = await this.transactionModel.updateOne(
       { wallet: checkResult._id },
-      { type: data.type, category: data.category, dataTime: data.dataTime },
+      {
+        type: data.type,
+        category: data.category,
+        dataTime: data.dataTime,
+        amount: data.amount,
+      },
     );
     if (answer.matchedCount === 1) {
+      if (currentTransaction.type === TransactionType.income) {
+        await this.walletModel.updateOne(checkResult, {
+          amount: currentWallet.amount - currentTransaction.amount,
+        });
+      } else if (currentTransaction.type === TransactionType.outcome) {
+        await this.walletModel.updateOne(checkResult, {
+          amount: currentWallet.amount + currentTransaction.amount,
+        });
+      }
+      const updatedWallet = await this.walletModel.findOne(checkResult);
+      if (data.type === TransactionType.income) {
+        await this.walletModel.updateOne(checkResult, {
+          amount: updatedWallet.amount + data.amount,
+        });
+      } else if (data.type === TransactionType.outcome) {
+        await this.walletModel.updateOne(checkResult, {
+          amount: updatedWallet.amount - data.amount,
+        });
+      }
       return { message: 'seccsess' };
     }
     return new NotFoundException({ messaage: 'Transaction is not found!' });
   }
 
-  async deleteOne(wallet: string, user: string) {
-    const checkResult = this.walletAndUserCheck(wallet, user);
-    if (!checkResult) {
+  async deleteOne(user: string, transaction: string) {
+    let transactionId;
+    let userId;
+    try {
+      transactionId = new Types.ObjectId(transaction);
+      userId = new Types.ObjectId(user);
+    } catch (e) {
       throw new BadRequestException('Something was wrong!');
     }
 
-    const findInBase = this.walletModel.findOne(checkResult);
-    if (!findInBase) {
-      throw new NotFoundException('Wallet is not found');
-    }
-
     const answer = await this.transactionModel.deleteOne({
-      wallet: checkResult._id,
+      _id: transactionId,
     });
     if (answer.deletedCount === 1) {
       return { message: 'seccsess' };

@@ -9,8 +9,9 @@ import {
   UseGuards,
   HttpStatus,
   UnprocessableEntityException,
-  Patch,
   Delete,
+  Query,
+  Put,
 } from '@nestjs/common';
 import mongoose from 'mongoose';
 import { Response, Request } from 'express';
@@ -59,18 +60,24 @@ export class TransactionController {
   }
 
   @UseGuards(TokenAuthGuard)
-  @Patch(':wallet')
+  @Put(':transaction')
   updateOne(
-    @Param('wallet') wallet: string,
+    @Param('transaction') transaction: string,
+    @Query('wallet') wallet: string,
     @Body() data: UpdateTransactionDto,
     @Req() req: Request,
   ) {
-    return this.transactionService.updateOne(data, req.user.toString(), wallet);
+    return this.transactionService.updateOne(
+      data,
+      req.user.toString(),
+      wallet,
+      transaction,
+    );
   }
 
   @UseGuards(TokenAuthGuard)
-  @Delete(':wallet')
-  deleteOne(@Param('wallet') wallet: string, @Req() req: Request) {
-    return this.transactionService.deleteOne(wallet, req.user.toString());
+  @Delete(':transaction')
+  deleteOne(@Req() req: Request, @Param('transaction') transaction: string) {
+    return this.transactionService.deleteOne(req.user.toString(), transaction);
   }
 }
