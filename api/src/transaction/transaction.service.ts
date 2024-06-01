@@ -67,12 +67,14 @@ export class TransactionService {
       throw new NotFoundException('Wallets is not found');
     }
 
-    const answer = [];
-    wallets.forEach(async (item) => {
-      const result = await this.transactionModel.find({
+    const promises = wallets.map((item) => {
+      return this.transactionModel.find({
         wallet: item._id,
       });
-      answer.push(...result);
+    });
+
+    const answer = await Promise.all(promises).then((values) => {
+      return values.flat();
     });
     return answer;
   }
