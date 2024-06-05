@@ -17,7 +17,7 @@ const initialState: WalletsState = {
   isLoading: false,
   error: null,
   showForm: false,
-  isaFormLoading: false,
+  isFormLoading: false,
   formError: null,
 };
 
