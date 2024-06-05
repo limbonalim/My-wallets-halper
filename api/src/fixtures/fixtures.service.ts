@@ -24,6 +24,18 @@ export class FixturesService {
     void this.createFixture();
   }
 
+  private today = new Date();
+
+  private getRandomNumber(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  private getRandomDate() {
+    let date = new Date();
+    date.setDate(this.today.getDate() - this.getRandomNumber(3, 34));
+    return date.toISOString();
+  }
+
   private TransactionTypeArr = Object.values(TransactionType);
   private TransactionCategoryArr = Object.values(TransactionCategory);
 
@@ -120,14 +132,14 @@ export class FixturesService {
     await db.close();
   }
 
-  async createTransactions (wallet) {
+  async createTransactions(wallet) {
     for (let j = 0; j < this.TransactionCategoryArr.length - 1; j++) {
       await this.transactionModel.create({
         type: j % 2 === 0 ? TransactionType.income : TransactionType.outcome,
         category: this.TransactionCategoryArr[j],
         wallet,
         amount: Math.floor(Math.random() * 50),
-        dataTime: new Date().toISOString()
+        dataTime: this.getRandomDate(),
       });
     }
   }
