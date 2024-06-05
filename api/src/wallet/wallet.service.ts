@@ -30,6 +30,21 @@ export class WalletService {
     return answer;
   }
 
+  async getAllByUser(user: string) {
+    let userId;
+    try {
+      userId = new Types.ObjectId(user);
+    } catch (e) {
+      throw new BadRequestException('Something was wrong!');
+    }
+
+    const answer = await this.walletModel.find({ user: userId });
+    if (!answer[0]) {
+      throw new NotFoundException('Wallet is not found');
+    }
+    return answer;
+  }
+
   async getOne(user: string, id: string) {
     let userId;
     try {

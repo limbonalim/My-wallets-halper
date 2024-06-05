@@ -30,6 +30,12 @@ export class WalletController {
   }
 
   @UseGuards(TokenAuthGuard)
+  @Get('/all')
+  getAllByUser(@Req() req: Request) {
+    return this.walletService.getAllByUser(req.user.toString());
+  }
+
+  @UseGuards(TokenAuthGuard)
   @Get(':id')
   async getOne(@Req() req: Request, @Param('id') id: string) {
     return await this.walletService.getOne(req.user.toString(), id);
