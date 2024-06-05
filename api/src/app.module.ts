@@ -16,6 +16,8 @@ import { WalletService } from './wallet/wallet.service';
 import { TransactionController } from './transaction/transaction.controller';
 import { TransactionService } from './transaction/transaction.service';
 import { FixturesService } from './fixtures/fixtures.service';
+import { AnaliticController } from './analitic/analitic.controller';
+import { AnaliticService } from './analitic/analitic.service';
 
 @Module({
   imports: [
@@ -27,7 +29,7 @@ import { FixturesService } from './fixtures/fixtures.service';
       { name: Transaction.name, schema: TransactionSchema },
     ]),
   ],
-  controllers: [AppController, UserController, WalletController, TransactionController],
+  controllers: [AppController, UserController, WalletController, TransactionController, AnaliticController],
   providers: [
     AppService,
     UserService,
@@ -35,7 +37,8 @@ import { FixturesService } from './fixtures/fixtures.service';
     LocalStrategy,
     WalletService,
     TransactionService,
-    FixturesService
+    FixturesService,
+    AnaliticService
   ],
 })
 export class AppModule {}
