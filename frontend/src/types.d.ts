@@ -100,3 +100,8 @@ export interface TransactionFormData {
 export interface UpdateTransactionFormData extends TransactionFormData {
   transactionId: string;
 }
+
+export interface GetAnaliticsData {
+  interval: string;
+  wallet: string;
+}
